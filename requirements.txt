@@ -1,19 +1,20 @@
 # Datos y análisis
 pandas==2.3.3
 numpy==2.3.5
-pyarrow==22.0.0
+pyarrow==26.0.0
 sodapy==2.2.0
 
 # Visualización
-matplotlib==3.10.7
+matplotlib==3.10.0
 seaborn==0.13.2
 plotly==7.1.0
 
 # Modelado
-scikit-learn==1.7.2
+scikit-learn==1.8.0
 
 # Tablero
 dash==4.4.1
 
 # Versionamiento de datos
-dvc[s3]==3.67.1
+dvc==3.67.1
+dvc-s3==3.3.0
