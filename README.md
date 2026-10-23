@@ -61,8 +61,15 @@ python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
+# El bucket es de lectura pública: no necesitas credenciales de AWS.
+# Esta línea se corre una sola vez y queda en .dvc/config.local (no se versiona).
+dvc remote modify --local aws-remote allow_anonymous_login true
+
 dvc pull                          # descarga los datos desde S3
 ```
+
+> Solo quien **sube** datos (`dvc push`) necesita credenciales de AWS con permiso de
+> escritura sobre el bucket. Para leer, el acceso anónimo es suficiente.
 
 ### Descargar periodos adicionales
 
