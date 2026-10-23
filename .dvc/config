@@ -1,1 +1,4 @@
-
+[core]
+    remote = aws-remote
+['remote "aws-remote"']
+    url = s3://g3-dsa-proyecto-data
