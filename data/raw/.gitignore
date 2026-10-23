@@ -1,0 +1,4 @@
+/saber_11_2020_1_2.parquet
+# Derivados locales no rastreados por DVC (se regeneran del parquet)
+/saber11.csv
+/saber11.db

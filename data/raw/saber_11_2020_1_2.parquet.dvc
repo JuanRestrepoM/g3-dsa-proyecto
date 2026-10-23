@@ -1,0 +1,5 @@
+outs:
+- md5: d9fdbb239dc3dd9eb856b095ec8864b9
+  size: 31054710
+  hash: md5
+  path: saber_11_2020_1_2.parquet
