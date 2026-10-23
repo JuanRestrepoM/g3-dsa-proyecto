@@ -205,6 +205,6 @@ razón.
 
 - Javier Cañon
 
-- Laura Domiguez
+- Laura Dominguez
 
 - Juan C Restrepo
