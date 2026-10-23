@@ -83,4 +83,6 @@ git push
 
 ## Equipo
 
-Pendiente.
+Javier Cañon
+Laura Dominguez
+Juan C Restrepo
