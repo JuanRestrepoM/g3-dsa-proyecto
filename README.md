@@ -203,4 +203,8 @@ razón.
 
 # Equipo
 
-Pendiente.
+- Javier Cañon
+
+- Laura Domiguez
+
+- Juan C Restrepo
