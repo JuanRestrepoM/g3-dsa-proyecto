@@ -1,0 +1,31 @@
+# ─── SECRETOS ──────────────────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+token.txt
+.aws/
+credentials
+
+# ─── DATOS Y MODELOS ───────────────────────────────────────
+# Los gestiona DVC: cada carpeta rastreada lleva su propio
+# .gitignore generado por `dvc add`. Aquí NO se listan, para
+# que los punteros .dvc sí lleguen a Git.
+
+# ─── Python ────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+*.egg-info/
+
+# ─── Notebooks: salidas pesadas ────────────────────────────
+# (los .ipynb SÍ se versionan; limpiar salidas antes de commit)
+
+# ─── Sistema / editor ──────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
