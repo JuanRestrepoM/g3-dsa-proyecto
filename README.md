@@ -33,7 +33,8 @@ sociales e inglés), características del estudiante, del hogar (estrato, educac
 padres, bienes y servicios) y del establecimiento educativo (naturaleza, calendario,
 jornada, ubicación urbana o rural).
 
-Los datos **no se versionan en Git**: se gestionan con DVC contra un bucket de S3.
+Los datos **no se versionan en Git**: se gestionan con DVC contra el bucket
+`s3://g3-dsa-proyecto-data`.
 
 ## Estructura
 
@@ -53,8 +54,8 @@ Los datos **no se versionan en Git**: se gestionan con DVC contra un bucket de S
 ## Puesta en marcha
 
 ```bash
-git clone <URL-DEL-REPO>
-cd Project
+git clone https://github.com/JuanRestrepoM/g3-dsa-proyecto.git
+cd g3-dsa-proyecto
 
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
