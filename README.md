@@ -9,12 +9,12 @@ esa API, todo desplegado con **contenedores Docker**.
 
 | Componente | Estado |
 |---|---|
-| Problema y contexto | Pendiente de definición con el equipo |
-| Pregunta de negocio y alcance | Pendiente de definición con el equipo |
+| Contexto y problema | Definido (ver sección abajo) |
+| Pregunta de negocio y alcance | Definido (ver sección abajo) |
 | Repositorio Git | Configurado |
 | Repositorio DVC (datos) | Configurado |
 | Exploración de datos | Primera versión en `notebooks/01_exploracion_datos.ipynb` |
-| Maqueta del tablero | Pendiente |
+| Maqueta del tablero | Disponible en `docs/mockup_tablero.png` |
 
 ---
 
@@ -208,3 +208,27 @@ razón.
 - Laura Dominguez
 
 - Juan C Restrepo
+
+# Contexto
+La prueba Saber 11, aplicada por el ICFES, es el examen de Estado que presentan los estudiantes de grado once en Colombia. Sus resultados se usan para la admisión a la educación superior, para asignar becas y créditos, y para que el Ministerio de Educación y las secretarías de educación evalúen la calidad de los establecimientos.
+
+El uso más común de estos resultados es comparar puntajes promedio entre colegios. Ese indicador mezcla dos cosas: lo que hace el colegio y el contexto de los estudiantes que recibe. La exploración de los datos de 2020-2 muestra que esta mezcla no es menor. Entre estudiantes, las brechas socioeconómicas son grandes y consistentes: la educación de la madre separa 91 puntos al grupo de mejor y peor desempeño, el estrato 63 y la jornada del colegio 64. Al agregar por establecimiento, el índice socioeconómico promedio (INSE) explica el 64 % de la variación del puntaje entre colegios (r = 0,80), frente a solo el 20 % entre estudiantes.
+
+Este patrón es consistente con lo reportado por el propio ICFES, según el cual el nivel socioeconómico explica una proporción alta de la variación entre establecimientos y muy baja dentro de ellos. En consecuencia, un ranking de puntajes brutos refleja ante todo la composición socioeconómica de cada colegio. Un colegio oficial rural con un puntaje modesto puede estar haciendo un trabajo notable con estudiantes de contexto difícil, y un colegio de estratos altos con puntaje alto puede estar rindiendo por debajo de lo que su población permitiría. Cuando una autoridad educativa prioriza acompañamiento, recursos o documentación de buenas prácticas con base en el puntaje bruto, confunde contexto con desempeño.
+
+# Problema 
+Hoy no hay una forma sencilla de saber si un colegio rinde bien o mal teniendo en cuenta el tipo de estudiantes que recibe.
+
+Para medirlo, comparamos el puntaje real de cada colegio con el que se esperaría según el nivel socioeconómico de sus estudiantes. Encontramos que 3 de cada 10 colegios (2.078 de 6.990) se alejan de lo esperado por más de 19 puntos: 1.017 obtienen mejores resultados de lo que su contexto haría prever y 1.061 obtienen peores.
+
+# Pregunta de negocio 
+¿Qué colegios obtienen en Saber 11 un puntaje significativamente superior o inferior al esperado según el perfil socioeconómico de sus estudiantes, y en qué regiones y tipos de establecimiento se concentran?
+
+# Alcance
+El proyecto trabaja con los resultados del periodo 2020-2 (calendario A), que reúne a 504.872 estudiantes. Para que el promedio de cada colegio sea confiable, solo se incluyen los establecimientos con 20 o más evaluados, que son 6.990. La variable principal es el puntaje global; los puntajes por área (lectura, matemáticas, ciencias, sociales e inglés) se usan como complemento en el tablero.
+
+Quedan por fuera tres cosas. Primero, no se busca predecir el puntaje de cada estudiante: a ese nivel el contexto socioeconómico explica apenas el 20 % de las diferencias, y clasificar a las personas por su origen sería éticamente cuestionable. Segundo, el proyecto no permite sacar conclusiones sobre las causas: muestra qué colegios se alejan de lo esperado, pero no por qué. Tercero, no se usa el periodo 2020-1 para entrenar el modelo, porque corresponde a colegios de calendario B evaluados antes de la pandemia, con un promedio 41 puntos más alto; queda solo como punto de comparación.
+
+Se reconocen las siguientes limitaciones: el periodo 2020-2 se aplicó en plena pandemia, lo que pudo afectar de forma distinta a cada tipo de colegio. Además, el residual captura todo lo que el modelo no observa (gestión, docentes, pero también variables omitidas), por lo que debe leerse como una alerta y no como una calificación definitiva.
+
+
