@@ -1,0 +1,5 @@
+outs:
+- md5: 91e22f0d53a3f9db594b1011ad80cb81
+  size: 796941
+  hash: md5
+  path: colegios_con_esperado.parquet

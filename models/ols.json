@@ -1,7 +1,7 @@
 {
   "modelo": "ols",
   "autor": "Juan C Restrepo",
-  "entrenado": "2026-11-07 01:53 UTC",
+  "entrenado": "2026-11-07 03:32 UTC",
   "hiperparametros": {},
   "objetivo": "punt_global_prom",
   "variables": [
