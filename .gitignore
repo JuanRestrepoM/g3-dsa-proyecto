@@ -12,6 +12,13 @@ credentials
 # .gitignore generado por `dvc add`. Aquí NO se listan, para
 # que los punteros .dvc sí lleguen a Git.
 
+# ─── MLflow ────────────────────────────────────────────────
+# Registro local de experimentos. La evidencia de la entrega son los
+# pantallazos del MLflow que corre en EC2, no estos archivos.
+mlruns/
+mlartifacts/
+mlflow.db
+
 # ─── Python ────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
