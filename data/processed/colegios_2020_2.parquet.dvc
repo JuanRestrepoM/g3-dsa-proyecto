@@ -1,5 +1,5 @@
 outs:
-- md5: c60fb145b3fa127dd64b1b09de01c45a
-  size: 736147
+- md5: ecfe4437d5c3132a86519dc8d2d4264f
+  size: 736170
   hash: md5
   path: colegios_2020_2.parquet

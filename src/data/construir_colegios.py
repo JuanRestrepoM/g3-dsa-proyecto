@@ -33,6 +33,29 @@ ESTRATOS_1_2 = ["Estrato 1", "Estrato 2"]
 ESTRATOS_5_6 = ["Estrato 5", "Estrato 6"]
 LIBROS_26MAS = ["26 A 100 LIBROS", "MÁS DE 100 LIBROS"]
 
+# Los datos traen la acentuación de los departamentos a medias: BOGOTÁ y NARIÑO sí
+# la llevan, pero ATLANTICO, BOLIVAR o CHOCO no. Eso obliga a que el tablero y la API
+# escriban cada nombre con la rareza exacta del dato, y un nombre mal escrito no da
+# error: el modelo lo toma como categoría desconocida y devuelve una predicción
+# equivocada pero creíble. Aquí se unifica a la forma correcta en español.
+#
+# Se corrige solo el departamento. En municipio NO se puede hacer lo mismo: CHIMÁ
+# (Córdoba) y CHIMA (Santander) son municipios distintos que colapsarían en uno.
+DEPARTAMENTOS = {
+    "ATLANTICO": "ATLÁNTICO",
+    "BOLIVAR": "BOLÍVAR",
+    "BOYACA": "BOYACÁ",
+    "CAQUETA": "CAQUETÁ",
+    "CHOCO": "CHOCÓ",
+    "CORDOBA": "CÓRDOBA",
+    "GUAINIA": "GUAINÍA",
+    "NORTE SANTANDER": "NORTE DE SANTANDER",
+    "QUINDIO": "QUINDÍO",
+    "SAN ANDRES": "SAN ANDRÉS",
+    "VALLE": "VALLE DEL CAUCA",
+    "VAUPES": "VAUPÉS",
+}
+
 PUNTAJES = {
     "punt_global": "punt_global_prom",
     "punt_lectura_critica": "punt_lectura_prom",
@@ -148,6 +171,7 @@ def agregar(df: pd.DataFrame) -> pd.DataFrame:
 
     colegios = identificacion.join(promedios).reset_index()
     colegios["cod_municipio"] = como_codigo(colegios["cod_municipio"])
+    colegios["departamento"] = colegios["departamento"].replace(DEPARTAMENTOS)
 
     print("\nAgregación:")
     print(f"  Colegios en total                             {len(colegios):>9,}")
