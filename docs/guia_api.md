@@ -104,9 +104,18 @@ Son 6.987 filas y 29 columnas: las 23 originales más seis que agrega el modelo.
 | `modelo` | Cuál modelo produjo la estimación |
 
 `clasificacion` marca los colegios cuyo puntaje real cae **fuera** del rango. Con el
-criterio actual son 398 de 6.987 (5,7 %): 189 por encima y 202 por debajo. Si para
+criterio actual son 396 de 6.987 (5,7 %): 209 por encima y 187 por debajo. Si para
 alguna vista necesitas un corte más amplio, filtra por `residual` directamente —por
-ejemplo `residual.abs() > 19`— sin recalcular nada.
+ejemplo `residual.abs() > 15`, que señala unos 1.950 colegios— sin recalcular nada.
+
+> El `esperado` de esta tabla se calcula **fuera de muestra**: a cada colegio lo
+> predice un modelo entrenado sin él. Es necesario porque los modelos de árboles
+> memorizan en parte lo que vieron, y si no se hiciera así el residual quedaría un
+> 20 % por debajo de lo real y la tabla señalaría menos de la mitad de los colegios
+> que de verdad se desvían. Por eso el `esperado` de un colegio concreto puede
+> diferir en unos pocos puntos del que devolvería la API para ese mismo perfil: la
+> API responde sobre perfiles nuevos y usa el modelo completo, que es lo correcto
+> para su pregunta.
 
 ---
 
@@ -151,13 +160,13 @@ perfil = {
 r = requests.post(f"{URL_API}/api/v1/predict", json=perfil, timeout=10)
 r.raise_for_status()
 print(r.json())
-# {'esperado': 240.3, 'inferior': 209.5, 'superior': 271.0, 'modelo': 'ols'}
+# {'esperado': 226.6, 'inferior': 198.0, 'superior': 255.2, 'modelo': 'lightgbm'}
 ```
 
 **Los ocho porcentajes van de 0 a 1, no de 0 a 100.** Si tu control está en
 porcentaje, divide entre 100 antes de mandarlo. Es el error más frecuente.
 
-El rango mide unos 61 puntos de ancho. No es un defecto: es cuánto del puntaje de un
+El rango mide unos 57 puntos de ancho. No es un defecto: es cuánto del puntaje de un
 colegio **no** explica su contexto socioeconómico, que es justo lo que el proyecto
 quiere mostrar. Conviene presentarlo como una banda y no como un número exacto.
 
@@ -216,7 +225,7 @@ Un error de categoría se ve así:
 **`GET /health`** dice si hay un modelo cargado y cuál:
 
 ```json
-{"estado": "ok", "modelo": "ols", "rmse": 15.6994, "entrenado": "2026-11-07 01:53 UTC"}
+{"estado": "ok", "modelo": "lightgbm", "rmse": 14.5757, "entrenado": "2026-11-07 22:55 UTC"}
 ```
 
 Vale la pena consultarlo al arrancar el tablero y mostrar un aviso claro si la API no
@@ -230,7 +239,7 @@ El contrato no va a cambiar. Puedes programar el simulador contra esta respuesta
 ejemplo y cambiar al servicio real sin reescribir nada:
 
 ```python
-{"esperado": 240.3, "inferior": 209.5, "superior": 271.0, "modelo": "ols"}
+{"esperado": 226.6, "inferior": 198.0, "superior": 255.2, "modelo": "lightgbm"}
 ```
 
 ---
@@ -242,7 +251,29 @@ como quedó acordado. Los demás quedan en el repositorio pero no contestan. Por
 respuesta incluye el campo `modelo`, para que siempre conste cuál produjo el número.
 
 Cuando entren los modelos de árboles y alguno gane, la API empieza a servirlo sin que
-nadie toque código. **Pero la tabla precalculada no se actualiza sola:** alguien tiene
-que volver a correr `python src/models/predecir_colegios.py` y publicarla. Si ves que
-la columna `modelo` de la tabla no coincide con la que devuelve `/health`, avisa — es
-señal de que la tabla quedó con un modelo viejo.
+nadie toque código. **Pero la tabla precalculada no se actualiza sola.**
+
+Para saber si quedó desactualizada, compara dos cosas:
+
+```python
+tabla = pd.read_parquet("data/processed/colegios_con_esperado.parquet")
+tabla["modelo"].iloc[0]                                    # el modelo de la tabla
+requests.get(f"{URL_API}/health").json()["modelo"]         # el modelo que sirve la API
+```
+
+Si no coinciden, la tabla quedó con un modelo viejo. **No tienes que esperar a nadie
+para arreglarlo:**
+
+```bash
+git pull                                      # trae el modelo nuevo
+python src/models/predecir_colegios.py        # recalcula la tabla en tu máquina
+```
+
+Eso reescribe `data/processed/colegios_con_esperado.parquet` con el modelo que esté
+ganando en ese momento, y tu tablero queda al día.
+
+> **`dvc push` es para compartir, no para usar.** Publicar la tabla para el resto del
+> equipo sí requiere credenciales del bucket, que solo tiene Juan. Pero para tu propio
+> tablero no hace falta: el archivo que genera el comando de arriba vive en tu disco y
+> funciona igual. Avísale después para que la publique, y mientras tanto sigues
+> trabajando sin bloquearte.

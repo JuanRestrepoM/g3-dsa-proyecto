@@ -27,6 +27,8 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 import pandas as pd
+from sklearn.base import clone
+from sklearn.model_selection import cross_val_predict
 
 from src.api import modelo as modelo_api
 from src.models import ficha
@@ -41,7 +43,21 @@ def main() -> None:
     m = modelo_api.cargar()
     print(f"Modelo: {m.nombre}  (RMSE {m.ficha['evaluacion']['rmse']}, σ {m.sigma:.2f})\n")
 
-    esperado = m.pipeline.predict(colegios[ficha.PREDICTORAS])
+    # El esperado se calcula FUERA DE MUESTRA: cada colegio lo predice un modelo
+    # entrenado sin él. No es un tecnicismo. Los modelos de árboles memorizan en
+    # parte los colegios que vieron, así que sus residuales dentro de muestra
+    # subestiman el error real —con LightGBM, 11,6 puntos frente a los 14,6 que
+    # mide la validación cruzada— y el tablero señalaría menos de la mitad de los
+    # colegios que de verdad se desvían.
+    #
+    # La API sí usa el modelo entrenado con todos los colegios, y es lo correcto:
+    # el simulador predice perfiles nuevos, que el modelo nunca vio. Aquí la
+    # pregunta es otra —cuánto se aleja un colegio conocido de su expectativa— y
+    # exige que la expectativa no esté contaminada por ese mismo colegio.
+    esperado = cross_val_predict(
+        clone(m.pipeline), colegios[ficha.PREDICTORAS], colegios[ficha.OBJETIVO],
+        cv=ficha.particiones(),
+    )
     margen = modelo_api.Z * m.sigma
 
     tabla = colegios.copy()
