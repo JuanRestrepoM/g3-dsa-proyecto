@@ -1,0 +1,124 @@
+{
+  "modelo": "lightgbm",
+  "autor": "Javier Cañón",
+  "entrenado": "2026-11-07 22:55 UTC",
+  "hiperparametros": {
+    "n_estimators": 300,
+    "learning_rate": 0.03,
+    "num_leaves": 31,
+    "min_child_samples": 20
+  },
+  "objetivo": "punt_global_prom",
+  "variables": [
+    "inse_prom",
+    "pct_madre_superior",
+    "pct_padre_superior",
+    "pct_estrato_1_2",
+    "pct_estrato_5_6",
+    "pct_internet",
+    "pct_computador",
+    "pct_libros_26mas",
+    "zona",
+    "departamento"
+  ],
+  "n_colegios": 6987,
+  "evaluacion": {
+    "metodo": "validación cruzada de 5 particiones",
+    "random_state": 42,
+    "rmse": 14.5757,
+    "rmse_std": 0.3066,
+    "mae": 11.0482,
+    "r2": 0.7916,
+    "r2_std": 0.0125
+  },
+  "residuales": {
+    "sigma_residual": 14.58,
+    "asimetria": 0.2761,
+    "curtosis_exceso": 1.501,
+    "cobertura_1.96_sigma": 0.9432,
+    "amplitud_intervalo": 57.1534
+  },
+  "categorias_validas": {
+    "zona": [
+      "RURAL",
+      "URBANO"
+    ],
+    "departamento": [
+      "AMAZONAS",
+      "ANTIOQUIA",
+      "ARAUCA",
+      "ATLÁNTICO",
+      "BOGOTÁ",
+      "BOLÍVAR",
+      "BOYACÁ",
+      "CALDAS",
+      "CAQUETÁ",
+      "CASANARE",
+      "CAUCA",
+      "CESAR",
+      "CHOCÓ",
+      "CUNDINAMARCA",
+      "CÓRDOBA",
+      "GUAINÍA",
+      "GUAVIARE",
+      "HUILA",
+      "LA GUAJIRA",
+      "MAGDALENA",
+      "META",
+      "NARIÑO",
+      "NORTE DE SANTANDER",
+      "PUTUMAYO",
+      "QUINDÍO",
+      "RISARALDA",
+      "SAN ANDRÉS",
+      "SANTANDER",
+      "SUCRE",
+      "TOLIMA",
+      "VALLE DEL CAUCA",
+      "VAUPÉS",
+      "VICHADA"
+    ]
+  },
+  "rangos_observados": {
+    "inse_prom": {
+      "min": 32.6046,
+      "mediana": 49.2946,
+      "max": 74.7362
+    },
+    "pct_madre_superior": {
+      "min": 0.0,
+      "mediana": 0.1774,
+      "max": 1.0
+    },
+    "pct_padre_superior": {
+      "min": 0.0,
+      "mediana": 0.1321,
+      "max": 0.9726
+    },
+    "pct_estrato_1_2": {
+      "min": 0.0,
+      "mediana": 0.7692,
+      "max": 1.0
+    },
+    "pct_estrato_5_6": {
+      "min": 0.0,
+      "mediana": 0.0,
+      "max": 0.8889
+    },
+    "pct_internet": {
+      "min": 0.0,
+      "mediana": 0.7258,
+      "max": 1.0
+    },
+    "pct_computador": {
+      "min": 0.0,
+      "mediana": 0.5814,
+      "max": 1.0
+    },
+    "pct_libros_26mas": {
+      "min": 0.0,
+      "mediana": 0.2246,
+      "max": 1.0
+    }
+  }
+}
