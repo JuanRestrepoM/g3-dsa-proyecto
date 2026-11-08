@@ -13,6 +13,9 @@ plotly==7.1.0
 scikit-learn==1.8.0
 scipy==1.16.3
 joblib==1.5.3
+# Necesaria tambien para SERVIR el modelo: el .joblib de LightGBM no se puede
+# cargar sin ella, asi que la API y el tablero la requieren aunque no entrenen.
+lightgbm==4.7.0
 
 # Seguimiento de experimentos
 mlflow==3.18.0
@@ -23,6 +26,7 @@ uvicorn==0.54.0
 
 # Tablero
 dash==4.4.1
+requests==2.33.1
 
 # Versionamiento de datos
 dvc==3.67.1
