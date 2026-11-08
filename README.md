@@ -83,6 +83,9 @@ que debe responder `Data and pipelines are up to date.`
 > no lo haga. Solo quien **sube** datos (`dvc push`) necesita credenciales con permiso de
 > escritura.
 
+Si algo falla, o si necesitas actualizar los datos cuando alguien avise que cambiaron,
+la guía completa está en **[docs/guia_datos_dvc.md](docs/guia_datos_dvc.md)**.
+
 ## 6. Abrir el notebook
 
 ```bash
@@ -196,7 +199,7 @@ razón.
 | Síntoma | Causa y solución |
 |---|---|
 | `dvc pull` → `Access Denied` o `403` | Falta el modo anónimo. Corre `dvc remote modify --local aws-remote allow_anonymous_login true` |
-| `dvc push` → error de credenciales | El token de sesión de AWS Academy expiró. Reinicia el laboratorio y vuelve a configurar `aws configure` más `aws configure set aws_session_token <TOKEN>` |
+| `dvc push` → `Access Denied` | Es lo esperado: el bucket es de lectura pública pero de escritura privada, y solo su dueño puede subir. Ver [docs/guia_datos_dvc.md](docs/guia_datos_dvc.md) |
 | `FileNotFoundError` con el parquet | Falta `dvc pull` |
 | `ModuleNotFoundError` | El entorno virtual no está activo, o falta `pip install -r requirements.txt` |
 | Tus commits aparecen a nombre de otro | No configuraste `git config user.name` y `user.email` en esta carpeta (paso 3) |

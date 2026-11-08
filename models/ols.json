@@ -1,0 +1,119 @@
+{
+  "modelo": "ols",
+  "autor": "Juan C Restrepo",
+  "entrenado": "2026-11-07 03:32 UTC",
+  "hiperparametros": {},
+  "objetivo": "punt_global_prom",
+  "variables": [
+    "inse_prom",
+    "pct_madre_superior",
+    "pct_padre_superior",
+    "pct_estrato_1_2",
+    "pct_estrato_5_6",
+    "pct_internet",
+    "pct_computador",
+    "pct_libros_26mas",
+    "zona",
+    "departamento"
+  ],
+  "n_colegios": 6987,
+  "evaluacion": {
+    "metodo": "validación cruzada de 5 particiones",
+    "random_state": 42,
+    "rmse": 15.6994,
+    "rmse_std": 0.2829,
+    "mae": 11.871,
+    "r2": 0.7582,
+    "r2_std": 0.014
+  },
+  "residuales": {
+    "sigma_residual": 15.7031,
+    "asimetria": 0.0616,
+    "curtosis_exceso": 1.3429,
+    "cobertura_1.96_sigma": 0.9436,
+    "amplitud_intervalo": 61.5562
+  },
+  "categorias_validas": {
+    "zona": [
+      "RURAL",
+      "URBANO"
+    ],
+    "departamento": [
+      "AMAZONAS",
+      "ANTIOQUIA",
+      "ARAUCA",
+      "ATLÁNTICO",
+      "BOGOTÁ",
+      "BOLÍVAR",
+      "BOYACÁ",
+      "CALDAS",
+      "CAQUETÁ",
+      "CASANARE",
+      "CAUCA",
+      "CESAR",
+      "CHOCÓ",
+      "CUNDINAMARCA",
+      "CÓRDOBA",
+      "GUAINÍA",
+      "GUAVIARE",
+      "HUILA",
+      "LA GUAJIRA",
+      "MAGDALENA",
+      "META",
+      "NARIÑO",
+      "NORTE DE SANTANDER",
+      "PUTUMAYO",
+      "QUINDÍO",
+      "RISARALDA",
+      "SAN ANDRÉS",
+      "SANTANDER",
+      "SUCRE",
+      "TOLIMA",
+      "VALLE DEL CAUCA",
+      "VAUPÉS",
+      "VICHADA"
+    ]
+  },
+  "rangos_observados": {
+    "inse_prom": {
+      "min": 32.6046,
+      "mediana": 49.2946,
+      "max": 74.7362
+    },
+    "pct_madre_superior": {
+      "min": 0.0,
+      "mediana": 0.1774,
+      "max": 1.0
+    },
+    "pct_padre_superior": {
+      "min": 0.0,
+      "mediana": 0.1321,
+      "max": 0.9726
+    },
+    "pct_estrato_1_2": {
+      "min": 0.0,
+      "mediana": 0.7692,
+      "max": 1.0
+    },
+    "pct_estrato_5_6": {
+      "min": 0.0,
+      "mediana": 0.0,
+      "max": 0.8889
+    },
+    "pct_internet": {
+      "min": 0.0,
+      "mediana": 0.7258,
+      "max": 1.0
+    },
+    "pct_computador": {
+      "min": 0.0,
+      "mediana": 0.5814,
+      "max": 1.0
+    },
+    "pct_libros_26mas": {
+      "min": 0.0,
+      "mediana": 0.2246,
+      "max": 1.0
+    }
+  }
+}
