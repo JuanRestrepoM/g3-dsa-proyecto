@@ -1,0 +1,20 @@
+# Dependencias del contenedor del tablero.
+#
+# El tablero no carga ningun modelo: lee la tabla de colegios ya calculada y
+# le pide al servicio de la API las predicciones del simulador. Por eso aqui
+# no aparecen scikit-learn ni lightgbm, que son casi todo el peso de la otra
+# imagen.
+#
+# pyarrow si es indispensable: sin el, pandas.read_parquet() no abre la tabla.
+
+# Interfaz
+dash==4.4.1
+plotly==7.1.0
+
+# Lectura de la tabla de colegios
+pandas==2.3.3
+numpy==2.3.5
+pyarrow==26.0.0
+
+# Llamadas a la API
+requests==2.33.1

@@ -1,0 +1,23 @@
+# Dependencias del contenedor de la API.
+#
+# Solo lo que necesita servir predicciones. No incluye dash, dvc ni mlflow:
+# esas son de desarrollo o del tablero, y meterlas aqui agrega cientos de MB
+# a la imagen sin que la API las use nunca.
+#
+# scikit-learn y lightgbm NO son opcionales aunque la API no entrene nada:
+# los .joblib son pipelines de scikit-learn y el modelo ganador lleva un
+# LGBMRegressor adentro, asi que joblib.load() falla sin esas librerias.
+
+# Servidor
+fastapi==0.162.0
+uvicorn==0.54.0
+
+# Carga del modelo y preparacion de la fila de entrada
+joblib==1.5.3
+pandas==2.3.3
+numpy==2.3.5
+
+# Necesarias para des-serializar los pipelines entrenados
+scikit-learn==1.8.0
+scipy==1.16.3
+lightgbm==4.7.0

@@ -1,0 +1,35 @@
+# Todo lo que no tiene por que viajar al contexto de construccion. Sin esto,
+# docker build sube el repositorio entero al daemon, incluidos el parquet crudo
+# de 30 MB y el cache de DVC.
+
+.git
+.dvc/cache
+.dvc/tmp
+
+# Datos: el unico que entra a una imagen es colegios_con_esperado.parquet, y lo
+# copia explicitamente el Dockerfile del tablero.
+data/raw
+data/processed/colegios_2020_2.parquet
+
+# Desarrollo y analisis, no hacen falta en produccion
+notebooks
+reports
+docs
+mlruns
+mlartifacts
+mlflow.db
+src/data
+src/models
+
+# Python
+__pycache__
+*.py[cod]
+.venv
+venv
+*.egg-info
+
+# Sistema y editor
+.DS_Store
+Thumbs.db
+.vscode
+.idea

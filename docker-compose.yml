@@ -1,0 +1,57 @@
+# Levanta la solucion completa: la API de inferencia y el tablero que la consume.
+#
+#     docker compose up --build        (agregar -d para dejarlo en segundo plano)
+#     docker compose logs -f           ver los registros de los dos servicios
+#     docker compose down              detener y borrar los contenedores
+#
+# Requisito previo: traer la tabla de colegios, que vive en DVC y no en Git.
+#     dvc remote modify --local aws-remote allow_anonymous_login true
+#     dvc pull
+#
+# Una vez arriba:   tablero -> http://localhost:8050     API -> http://localhost:8001/docs
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    image: g3-api:latest
+    container_name: g3-api
+    environment:
+      PORT: 8001
+    ports:
+      - "8001:8001"
+    # El tablero espera a que esto responda antes de arrancar. Se consulta con
+    # urllib en vez de curl porque la imagen slim no trae curl y no vale la pena
+    # agregarlo solo para esto.
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://localhost:8001/health')
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    image: g3-dashboard:latest
+    container_name: g3-dashboard
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8050
+      # Dentro de la red de compose, 'api' es el nombre del servicio y Docker lo
+      # resuelve solo. No hay IPs escritas a mano, asi que esto funciona igual
+      # en un portatil que en EC2, y el trafico no sale a internet.
+      URL_API: http://api:8001
+    ports:
+      - "8050:8050"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
