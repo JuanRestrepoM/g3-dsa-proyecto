@@ -1,0 +1,42 @@
+# Imagen del tablero.
+#
+# El tablero no carga modelos: lee la tabla de colegios con el puntaje ya
+# calculado y consulta la API para el simulador. Por eso esta imagen es
+# mucho mas liviana que la de la API.
+#
+# La tabla se copia dentro de la imagen, asi que ANTES de construir hay que
+# traerla con DVC:
+#     dvc pull data/processed/colegios_con_esperado.parquet.dvc
+#
+# Construir desde la raiz del repositorio:
+#     docker build -f Dockerfile.dashboard -t g3-dashboard:latest .
+
+FROM python:3.11-slim
+
+RUN useradd --create-home --shell /bin/bash dashuser
+
+WORKDIR /app
+
+COPY requirements-dashboard.txt ./
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements-dashboard.txt
+
+# Se respeta la estructura del repositorio: src/dashboard/app.py resuelve la
+# raiz con parents[2] y busca la tabla en data/processed/ desde ahi.
+COPY --chown=dashuser:dashuser src/__init__.py  ./src/__init__.py
+COPY --chown=dashuser:dashuser src/dashboard    ./src/dashboard
+COPY --chown=dashuser:dashuser data/processed/colegios_con_esperado.parquet \
+     ./data/processed/colegios_con_esperado.parquet
+
+USER dashuser
+
+EXPOSE 8050
+
+# HOST en 0.0.0.0 es lo que hace que el tablero sea alcanzable desde fuera del
+# contenedor; su valor por defecto en app.py es 127.0.0.1 y no serviria aqui.
+# URL_API apunta al servicio 'api' de la red interna de Docker, no a una IP.
+ENV HOST=0.0.0.0 \
+    PORT=8050 \
+    URL_API=http://api:8001
+
+CMD ["python", "src/dashboard/app.py"]

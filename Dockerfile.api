@@ -1,0 +1,45 @@
+# Imagen de la API de inferencia.
+#
+# Sirve el modelo de menor RMSE entre los que haya en models/. El modelo viaja
+# DENTRO de la imagen: no se descarga nada al arrancar, asi que el contenedor
+# es autosuficiente y arranca igual sin red.
+#
+# Construir desde la raiz del repositorio:
+#     docker build -f Dockerfile.api -t g3-api:latest .
+
+FROM python:3.11-slim
+
+# LightGBM necesita OpenMP (libgomp1) y la imagen slim no lo trae.
+# Sin esto, la API falla al cargar el modelo: "libgomp.so.1: cannot open shared object file".
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# No correr como root. Se crea el usuario antes de copiar nada para poder
+# entregarle la propiedad de los archivos en el mismo paso del COPY.
+RUN useradd --create-home --shell /bin/bash apiuser
+
+WORKDIR /app
+
+# Las dependencias van antes que el codigo a proposito: Docker cachea cada
+# instruccion, y asi un cambio en src/ no obliga a reinstalar scikit-learn.
+COPY requirements-api.txt ./
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements-api.txt
+
+# El codigo y los modelos. Se respeta la estructura del repositorio porque
+# src/api/modelo.py resuelve la raiz con parents[2] y busca models/ ahi.
+COPY --chown=apiuser:apiuser src/__init__.py        ./src/__init__.py
+COPY --chown=apiuser:apiuser src/api                ./src/api
+COPY --chown=apiuser:apiuser models                 ./models
+
+USER apiuser
+
+# Documenta el puerto; quien lo publica de verdad es el -p del run o el
+# mapeo de puertos del compose.
+EXPOSE 8001
+
+# PORT se puede sobrescribir al ejecutar. --host 0.0.0.0 es obligatorio dentro
+# de un contenedor: con el 127.0.0.1 por defecto solo se oiria a si mismo.
+ENV PORT=8001
+CMD ["sh", "-c", "uvicorn src.api.main:app --host 0.0.0.0 --port ${PORT}"]
